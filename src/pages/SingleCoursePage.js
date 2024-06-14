@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect ,useCallback} from 'react';
 import { useParams } from 'react-router-dom';
 import styled from "styled-components";
 import { useCoursesContext } from '../context/courses_context';
@@ -12,16 +12,38 @@ import {Link} from "react-router-dom";
 import { useCartContext } from '../context/cart_context';
 
 const SingleCoursePage = () => {
-  const {id} = useParams();
-  const {fetchSingleCourse, single_course} = useCoursesContext();
-  const {addToCart} = useCartContext();
+  const { id } = useParams();
+  const { fetchSingleCourse, single_course } = useCoursesContext();
+  const { addToCart } = useCartContext();
+
+
+  const memoizedFetchSingleCourse = useCallback(() => {
+    fetchSingleCourse(id);
+  }, [fetchSingleCourse, id]);
 
   useEffect(() => {
-    fetchSingleCourse(id);
-  }, []);
+    memoizedFetchSingleCourse();
+  }, [memoizedFetchSingleCourse]);
 
-  const {id: courseID, category, image, course_name, description, rating_count, rating_star, students, creator, updated_date, lang, actual_price, discounted_price, what_you_will_learn: learnItems, content} = single_course;
+  const {
+    id: courseID,
+    category,
+    image,
+    course_name,
+    description,
+    rating_count,
+    rating_star,
+    students,
+    creator,
+    updated_date,
+    lang,
+    actual_price,
+    discounted_price,
+    what_you_will_learn: learnItems,
+    content
+  } = single_course;
 
+  
   return (
     <SingleCourseWrapper>
       <div className='course-intro mx-auto grid'>
